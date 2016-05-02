@@ -115,11 +115,11 @@ prompt_git() {
     origin="@{upstream}"
     upstream=" "
 
-    left=$(git rev-list --count --left-only ${origin}...HEAD)
+    left=$(git rev-list --count --left-only ${origin}...HEAD 2>/dev/null)
     if [[ ${left} > "0" ]]; then
       upstream=" -${left}"
     fi
-    right=$(git rev-list --count --right-only ${origin}...HEAD)
+    right=$(git rev-list --count --right-only ${origin}...HEAD 2>/dev/null)
     if [[ ${right} > "0" ]]; then
       upstream="${upstream}+${right}"
     fi
