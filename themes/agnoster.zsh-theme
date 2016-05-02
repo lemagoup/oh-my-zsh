@@ -112,6 +112,18 @@ prompt_git() {
       mode=" >R>"
     fi
 
+    origin="@{upstream}"
+    upstream=" "
+
+    left=$(git rev-list --count --left-only ${origin}...HEAD)
+    if [[ ${left} > "0" ]]; then
+      upstream=" -${left}"
+    fi
+    right=$(git rev-list --count --right-only ${origin}...HEAD)
+    if [[ ${right} > "0" ]]; then
+      upstream="${upstream}+${right}"
+    fi
+
     setopt promptsubst
     autoload -Uz vcs_info
 
@@ -123,7 +135,7 @@ prompt_git() {
     zstyle ':vcs_info:*' formats ' %u%c'
     zstyle ':vcs_info:*' actionformats ' %u%c'
     vcs_info
-    echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${mode}"
+    echo -n "${ref/refs\/heads\//$PL_BRANCH_CHAR }${vcs_info_msg_0_%% }${upstream}${mode}"
   fi
 }
 
